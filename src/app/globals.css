@@ -147,11 +147,16 @@ body::-webkit-scrollbar-thumb{background:var(--red-deep);border:2px solid var(--
 
 @media(max-width:880px){
   .nav__links{
-    position:fixed;inset:0;background:var(--ink);flex-direction:column;justify-content:center;
-    gap:28px;transform:translateY(-100%);transition:transform .5s var(--ease);
+    position:fixed;inset:0;width:100vw;height:100vh;background:var(--ink);
+    flex-direction:column;justify-content:center;gap:28px;z-index:1;
+    /* Hide via opacity+visibility (not a viewport-relative transform): the
+       scrolled nav's backdrop-filter re-anchors this fixed element to the nav
+       bar, so translateY(-100%) would only shift it ~70px and leak into view. */
+    opacity:0;visibility:hidden;transform:translateY(-12px);
+    transition:opacity .35s var(--ease),transform .45s var(--ease),visibility .35s;
   }
   .nav__links a{font-size:24px}
-  .nav.open .nav__links{transform:translateY(0)}
+  .nav.open .nav__links{opacity:1;visibility:visible;transform:translateY(0)}
   .nav.open .nav__burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
   .nav.open .nav__burger span:nth-child(2){opacity:0}
   .nav.open .nav__burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
