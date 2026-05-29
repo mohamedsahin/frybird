@@ -25,6 +25,29 @@ model Product {
   @@map("products")
 }
 
+model Location {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  nameAr        String   @default("") @map("name_ar")
+  descriptor    String   @default("")
+  statusLabel   String   @default("Open Now") @map("status_label")
+  accent        Boolean  @default(false)
+  isPlaceholder Boolean  @default(false) @map("is_placeholder")
+  address       String   @default("")
+  hours         String   @default("")
+  phone         String   @default("")
+  mapUrl        String   @default("") @map("map_url")
+  img           String?
+  mapX          Int      @default(50) @map("map_x")
+  mapY          Int      @default(50) @map("map_y")
+  sortOrder     Int      @default(0) @map("sort_order")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("locations")
+}
+
 model Submission {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)

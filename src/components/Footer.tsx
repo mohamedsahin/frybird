@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
-export default function Footer() {
+export default function Footer({ cities = [] }: { cities?: string[] }) {
   const year = new Date().getFullYear();
+  const cityLine = cities.length ? cities.join(' · ') : 'UAE & Oman';
   return (
     <footer className="footer">
       <div className="footer__strip" aria-hidden="true">
@@ -24,7 +25,7 @@ export default function Footer() {
         <div className="footer__bar">
           <div className="col">
             <b>Visit Us</b>
-            <span>Fujairah · Ajman · Oman</span>
+            <span>{cityLine}</span>
             <span>Open daily · 11am – late</span>
           </div>
           <div className="mid">

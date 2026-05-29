@@ -1,12 +1,17 @@
 import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
+import { getLocations } from '@/lib/store';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Contact — FRYBIRD | Fried Chicken • Burgers',
   description: 'Get in touch with FRYBIRD — catering, feedback, franchise enquiries or just to say hi. @frybird.ae',
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const locations = await getLocations();
+  const cityLine = locations.filter((l) => !l.isPlaceholder).map((l) => l.name).join(' · ') || 'UAE & Oman';
   return (
     <>
       <section className="page-hero">
@@ -37,7 +42,7 @@ export default function ContactPage() {
               </div>
               <div className="ci">
                 <b>Visit</b>
-                <span>Fujairah · Ajman · Oman</span>
+                <span>{cityLine}</span>
                 <span>Open daily · 11:00am – late</span>
               </div>
               <div className="ci">

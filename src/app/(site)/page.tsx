@@ -4,8 +4,21 @@ import SignatureHits from '@/components/SignatureHits';
 import LocationsMap from '@/components/LocationsMap';
 import Doodle, { Scribble } from '@/components/Doodle';
 import Chicken3D from '@/components/Chicken3D';
+import { getLocations } from '@/lib/store';
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+// Spell out small counts ("Three locations") and fall back to digits beyond that.
+function countWord(n: number): string {
+  const words = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+  return words[n] ?? String(n);
+}
+
+export default async function HomePage() {
+  const locations = await getLocations();
+  const openCount = locations.filter((l) => !l.isPlaceholder).length;
+  const cityNames = locations.filter((l) => !l.isPlaceholder).map((l) => l.name).join(', ');
+
   return (
     <>
       {/* ============ HERO ============ */}
@@ -70,7 +83,7 @@ export default function HomePage() {
               <span className="kicker txt-red" style={{ display: 'block', marginBottom: 18 }}>/ The Bird</span>
               <h2 className="display">Born in the UAE.<br /><em>Fried to <span className="scribbleword">obsession.<Scribble /></span></em></h2>
               <p>It started with one idea: chicken so crunchy, so juicy, so <strong>shamelessly good</strong> that you&apos;d plan your whole day around it. We brine every cut in buttermilk overnight, hand-bread it to order, and fry it in small batches until it shatters.</p>
-              <p>From Fujairah to Ajman to Oman, FRYBIRD has become the neighbourhood spot where the diner glows red, the posters cover the walls, and the tray always says one thing — <strong>FRY. EAT. REPEAT.</strong></p>
+              <p>{cityNames ? `Across ${cityNames}, ` : ''}FRYBIRD has become the neighbourhood spot where the diner glows red, the posters cover the walls, and the tray always says one thing — <strong>FRY. EAT. REPEAT.</strong></p>
               <Link href="/menu" className="btn btn--red" style={{ marginTop: 10 }} data-magnetic><span className="lbl">Taste the Hype <span className="arrow">→</span></span></Link>
             </div>
             <div className="story__media" data-reveal>
@@ -174,9 +187,9 @@ export default function HomePage() {
               <span className="kicker txt-red" style={{ display: 'block', marginBottom: 16 }}>/ Find Your Fix</span>
               <h2 className="display txt-cream">Where The<br /><span className="txt-red">Birds</span> Are</h2>
             </div>
-            <p data-reveal>Three locations and counting across the UAE &amp; Oman. Hover a branch to light it up on the map.</p>
+            <p data-reveal>{countWord(openCount)} location{openCount === 1 ? '' : 's'} and counting across the UAE &amp; Oman. Hover a branch to light it up on the map.</p>
           </div>
-          <LocationsMap />
+          <LocationsMap locations={locations} />
         </div>
       </section>
 

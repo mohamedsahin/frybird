@@ -749,6 +749,9 @@ html.js [data-reveal-stagger].in > *{opacity:1;transform:none}
 .adm-form textarea{resize:vertical}
 .adm-form input[type=range]{padding:0;accent-color:var(--red)}
 .adm-form__actions{display:flex;gap:12px;margin-top:8px}
+.adm-form__check{justify-content:center}
+.adm-form__check label{display:flex;flex-direction:row;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px;font-weight:600;color:var(--cream);cursor:pointer}
+.adm-form__check input[type=checkbox]{width:18px;height:18px;accent-color:var(--red);flex:0 0 auto}
 
 /* Product form — image upload + preview */
 .adm-form__image{display:flex;gap:16px;align-items:flex-start}

@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { prisma } from '@/lib/prisma';
 import { DEFAULT_PRODUCTS } from '@/data/menu';
-import type { Product, Submission } from '@/types';
+import { DEFAULT_LOCATIONS } from '@/data/locations';
+import type { Product, Submission, Location } from '@/types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
@@ -110,6 +111,10 @@ async function ensureInitialized() {
 }
 
 async function initializeData() {
+  await Promise.all([initializeProducts(), initializeLocations()]);
+}
+
+async function initializeProducts() {
   const count = await prisma.product.count();
   if (count > 0) return;
 
@@ -124,6 +129,22 @@ async function initializeData() {
         create: { slug: p.slug, ...productData(p) },
       })
     )
+  );
+}
+
+async function initializeLocations() {
+  const count = await prisma.location.count();
+  if (count > 0) return;
+
+  await prisma.$transaction(
+    DEFAULT_LOCATIONS.map((l) => {
+      const loc = normalizeLocation(l);
+      return prisma.location.upsert({
+        where: { slug: loc.slug },
+        update: locationData(loc),
+        create: { slug: loc.slug, ...locationData(loc) },
+      });
+    })
   );
 }
 
@@ -277,4 +298,139 @@ export async function updateSubmission(id: string, patch: Partial<Submission>): 
 export async function deleteSubmission(id: string) {
   await ensureInitialized();
   await prisma.submission.deleteMany({ where: { id } });
+}
+
+// ============================================================
+// Locations
+// ============================================================
+
+type LocationInput = Partial<Record<keyof Location, unknown>>;
+
+function clampPercent(value: unknown): number {
+  return Math.max(0, Math.min(100, Math.round(Number(value) || 0)));
+}
+
+// Single source of truth for location shaping — shared with the API routes.
+export function normalizeLocation(input: LocationInput): Location {
+  return {
+    slug: (input.slug || '').toString().trim(),
+    name: (input.name || '').toString().trim(),
+    nameAr: (input.nameAr || '').toString().trim(),
+    descriptor: (input.descriptor || '').toString().trim(),
+    statusLabel: (input.statusLabel || 'Open Now').toString().trim() || 'Open Now',
+    accent: Boolean(input.accent),
+    isPlaceholder: Boolean(input.isPlaceholder),
+    address: (input.address || '').toString().trim(),
+    hours: (input.hours || '').toString().trim(),
+    phone: (input.phone || '').toString().trim(),
+    mapUrl: (input.mapUrl || '').toString().trim(),
+    img: input.img ? input.img.toString().trim() : null,
+    mapX: clampPercent(input.mapX),
+    mapY: clampPercent(input.mapY),
+    sortOrder: Number(input.sortOrder) || 0,
+  };
+}
+
+// Maps a normalized Location to the Prisma column shape (everything except slug).
+function locationData(l: Location) {
+  return {
+    name: l.name,
+    nameAr: l.nameAr,
+    descriptor: l.descriptor,
+    statusLabel: l.statusLabel,
+    accent: l.accent,
+    isPlaceholder: l.isPlaceholder,
+    address: l.address,
+    hours: l.hours,
+    phone: l.phone,
+    mapUrl: l.mapUrl,
+    img: l.img,
+    mapX: l.mapX,
+    mapY: l.mapY,
+    sortOrder: l.sortOrder,
+  };
+}
+
+function rowToLocation(row: {
+  slug: string;
+  name: string;
+  nameAr: string;
+  descriptor: string;
+  statusLabel: string;
+  accent: boolean;
+  isPlaceholder: boolean;
+  address: string;
+  hours: string;
+  phone: string;
+  mapUrl: string;
+  img: string | null;
+  mapX: number;
+  mapY: number;
+  sortOrder: number;
+}): Location {
+  return {
+    slug: row.slug,
+    name: row.name,
+    nameAr: row.nameAr,
+    descriptor: row.descriptor,
+    statusLabel: row.statusLabel,
+    accent: row.accent,
+    isPlaceholder: row.isPlaceholder,
+    address: row.address,
+    hours: row.hours,
+    phone: row.phone,
+    mapUrl: row.mapUrl,
+    img: row.img,
+    mapX: row.mapX,
+    mapY: row.mapY,
+    sortOrder: row.sortOrder,
+  };
+}
+
+export async function getLocations(): Promise<Location[]> {
+  await ensureInitialized();
+  const rows = await prisma.location.findMany({
+    orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+  });
+  return rows.map(rowToLocation);
+}
+
+export async function getLocationBySlug(slug: string): Promise<Location | null> {
+  await ensureInitialized();
+  const row = await prisma.location.findUnique({ where: { slug } });
+  return row ? rowToLocation(row) : null;
+}
+
+export async function upsertLocation(location: Location, originalSlug?: string): Promise<Location> {
+  await ensureInitialized();
+  const l = normalizeLocation(location);
+
+  if (originalSlug && originalSlug !== l.slug) {
+    await prisma.$transaction(async (tx) => {
+      const existingNew = await tx.location.findUnique({ where: { slug: l.slug } });
+      if (existingNew) {
+        throw new Error('A location with that slug already exists.');
+      }
+      const updated = await tx.location.updateMany({
+        where: { slug: originalSlug },
+        data: { slug: l.slug, ...locationData(l) },
+      });
+      if (updated.count === 0) {
+        await tx.location.create({ data: { slug: l.slug, ...locationData(l) } });
+      }
+    });
+    return l;
+  }
+
+  await prisma.location.upsert({
+    where: { slug: l.slug },
+    update: locationData(l),
+    create: { slug: l.slug, ...locationData(l) },
+  });
+  return l;
+}
+
+export async function deleteLocation(slug: string) {
+  await ensureInitialized();
+  await prisma.location.deleteMany({ where: { slug } });
 }

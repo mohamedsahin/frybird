@@ -29,6 +29,33 @@ export interface CartItem {
   qty: number;
 }
 
+export interface Location {
+  slug: string;
+  /** City / branch name, e.g. "Fujairah" */
+  name: string;
+  /** Arabic name, e.g. "الفجيرة" */
+  nameAr: string;
+  /** Short tagline, e.g. "East Coast flagship" */
+  descriptor: string;
+  /** Status pill text, e.g. "Open Now" / "Coming Soon" */
+  statusLabel: string;
+  /** Highlight the row in brand red (the featured branch) */
+  accent: boolean;
+  /** "Your City?" style aspirational entry — no detail card / directions */
+  isPlaceholder: boolean;
+  address: string;
+  hours: string;
+  phone: string;
+  /** Google Maps share/directions link */
+  mapUrl: string;
+  /** Photo URL (UploadThing) or null for a placeholder tile */
+  img: string | null;
+  /** Pin position on the stylised map, 0–100 (% of width / height) */
+  mapX: number;
+  mapY: number;
+  sortOrder: number;
+}
+
 export interface Submission {
   id: string;
   createdAt: string;

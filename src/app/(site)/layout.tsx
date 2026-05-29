@@ -8,20 +8,21 @@ import MobileTabBar from '@/components/MobileTabBar';
 import OrderBar from '@/components/OrderBar';
 import Toast from '@/components/Toast';
 import { SparkCursor } from '@/components/Doodle';
-import { getProducts } from '@/lib/store';
+import { getProducts, getLocations } from '@/lib/store';
 import type { ReactNode } from 'react';
 
 // Reads the live product catalogue per request so admin edits show up.
 export const dynamic = 'force-dynamic';
 
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  const products = await getProducts();
+  const [products, locations] = await Promise.all([getProducts(), getLocations()]);
+  const cities = locations.filter((l) => !l.isPlaceholder).map((l) => l.name);
   return (
     <ProductsProvider products={products}>
       <CartProvider>
         <Nav />
         <main>{children}</main>
-        <Footer />
+        <Footer cities={cities} />
         <CartDrawer />
         <OrderBar />
         <MobileTabBar />

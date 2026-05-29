@@ -1,30 +1,24 @@
 import Link from 'next/link';
 import LocationsMap from '@/components/LocationsMap';
+import { getLocations } from '@/lib/store';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Locations — FRYBIRD | Fried Chicken • Burgers',
   description: 'Find your nearest FRYBIRD across the UAE & Oman — Fujairah, Ajman and more. Open daily, 11am til late.',
 };
 
-const BRANCHES = [
-  {
-    num: '01', name: 'Fujairah', img: '/img/storefront-night.png', status: 'open', pill: '● Open Now',
-    meta: [['Address', 'Main Street, Fujairah · الفجيرة, UAE'], ['Hours', 'Daily · 11:00am – 2:00am'], ['Phone', '+971 50 000 0000']],
-    maps: 'https://www.google.com/maps/search/FRYBIRD+Fujairah',
-  },
-  {
-    num: '02', name: 'Ajman', img: '/img/interior-counter.png', status: 'open', pill: '● Open Now',
-    meta: [['Address', 'City Centre area, Ajman · عجمان, UAE'], ['Hours', 'Daily · 11:00am – 2:00am'], ['Phone', '+971 55 774 0687']],
-    maps: 'https://www.google.com/maps/search/FRYBIRD+Ajman',
-  },
-  {
-    num: '03', name: 'Oman', img: '/img/queue.png', status: 'open', pill: '● Open Now',
-    meta: [['Address', 'Now serving · عُمان, Oman'], ['Hours', 'Daily · 11:00am – 1:00am'], ['Phone', '+968 0000 0000']],
-    maps: 'https://www.google.com/maps/search/FRYBIRD+Oman',
-  },
-];
+function countWord(n: number): string {
+  const words = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+  return words[n] ?? String(n);
+}
 
-export default function LocationsPage() {
+export default async function LocationsPage() {
+  const locations = await getLocations();
+  const branches = locations.filter((l) => !l.isPlaceholder);
+  const teaser = locations.find((l) => l.isPlaceholder);
+
   return (
     <>
       <section className="page-hero">
@@ -35,13 +29,13 @@ export default function LocationsPage() {
         <div className="wrap page-hero__inner">
           <div className="crumb" data-reveal><a href="/">Home</a> / Locations</div>
           <h1 className="display" data-reveal>Where The<br /><span className="txt-red">Birds Are</span></h1>
-          <p data-reveal>Three spots across the UAE &amp; Oman — and more on the way. Hover a branch to light it up on the map.</p>
+          <p data-reveal>{countWord(branches.length)} spot{branches.length === 1 ? '' : 's'} across the UAE &amp; Oman — and more on the way. Hover a branch to light it up on the map.</p>
         </div>
       </section>
 
       <section className="section loc" style={{ paddingTop: 'clamp(40px,6vw,70px)' }}>
         <div className="wrap">
-          <LocationsMap />
+          <LocationsMap locations={locations} />
         </div>
       </section>
 
@@ -55,45 +49,53 @@ export default function LocationsPage() {
             <p data-reveal>Every FRYBIRD runs the same playbook — fried to order, open late, loud as ever.</p>
           </div>
 
-          {BRANCHES.map((b) => (
-            <div className="branch" data-reveal key={b.num}>
+          {branches.map((b, i) => (
+            <div className="branch" data-reveal key={b.slug}>
               <div className="branch__media">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={b.img} alt={`FRYBIRD ${b.name}`} />
+                {b.img ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img src={b.img} alt={`FRYBIRD ${b.name}`} />
+                ) : (
+                  <div className="ph"><span className="ph__tag">Photo coming soon</span><span className="ph__name">{b.name}</span></div>
+                )}
               </div>
               <div>
-                <span className={`pill ${b.status}`}>{b.pill}</span>
-                <div className="branch__num">{b.num}</div>
+                <span className="pill open">● {b.statusLabel}</span>
+                <div className="branch__num">{String(i + 1).padStart(2, '0')}</div>
                 <h3>{b.name}</h3>
                 <div className="branch__meta">
-                  {b.meta.map(([k, v]) => (
-                    <div key={k}><b>{k}</b><span>{v}</span></div>
-                  ))}
+                  {b.address && <div><b>Address</b><span>{b.address}</span></div>}
+                  {b.hours && <div><b>Hours</b><span>{b.hours}</span></div>}
+                  {b.phone && <div><b>Phone</b><span>{b.phone}</span></div>}
                 </div>
-                <a href={b.maps} target="_blank" rel="noopener noreferrer" className="btn btn--red" data-magnetic>
-                  <span className="lbl">Get Directions <span className="arrow">→</span></span>
-                </a>
+                {b.mapUrl && (
+                  <a href={b.mapUrl} target="_blank" rel="noopener noreferrer" className="btn btn--red" data-magnetic>
+                    <span className="lbl">Get Directions <span className="arrow">→</span></span>
+                  </a>
+                )}
               </div>
             </div>
           ))}
 
-          <div className="branch" data-reveal>
-            <div className="branch__media">
-              <div className="ph"><span className="ph__tag">Opening Soon</span><span className="ph__name">Your City</span></div>
-            </div>
-            <div>
-              <span className="pill soon">Coming Soon</span>
-              <div className="branch__num">04</div>
-              <h3>Next Up</h3>
-              <div className="branch__meta">
-                <div><b>Where</b><span>We&apos;re scouting new neighbourhoods across the GCC.</span></div>
-                <div><b>Want one?</b><span>Tell us where you want a FRYBIRD next.</span></div>
+          {teaser && (
+            <div className="branch" data-reveal>
+              <div className="branch__media">
+                <div className="ph"><span className="ph__tag">Opening Soon</span><span className="ph__name">{teaser.name}</span></div>
               </div>
-              <Link href="/contact" className="btn btn--ghost" data-magnetic>
-                <span className="lbl">Suggest a Location <span className="arrow">→</span></span>
-              </Link>
+              <div>
+                <span className="pill soon">{teaser.statusLabel}</span>
+                <div className="branch__num">{String(branches.length + 1).padStart(2, '0')}</div>
+                <h3>Next Up</h3>
+                <div className="branch__meta">
+                  <div><b>Where</b><span>{teaser.address || "We're scouting new neighbourhoods across the GCC."}</span></div>
+                  <div><b>Want one?</b><span>Tell us where you want a FRYBIRD next.</span></div>
+                </div>
+                <Link href="/contact" className="btn btn--ghost" data-magnetic>
+                  <span className="lbl">Suggest a Location <span className="arrow">→</span></span>
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
     </>
