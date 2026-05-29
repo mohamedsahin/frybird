@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Product {
+  slug        String   @id
+  cat         String
+  name        String
+  tag         String   @default("")
+  price       Int      @default(0)
+  heat        Int      @default(0)
+  img         String?
+  blurb       String   @default("")
+  description String   @default("") @map("desc")
+  facts       Json     @default(dbgenerated("'[]'::jsonb")) @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("products")
+}
+
+model Submission {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  read      Boolean  @default(false)
+  name      String
+  email     String
+  topic     String   @default("General")
+  message   String
+
+  @@map("submissions")
+}
