@@ -5,8 +5,8 @@ import { useCart } from './CartContext';
 import { useProducts } from './ProductsContext';
 import { aed } from '@/data/menu';
 
-// Replace with the real FRYBIRD WhatsApp number (international format, digits only).
-const WHATSAPP_NUMBER = '97100000000';
+// FRYBIRD WhatsApp number (international format, digits only).
+const WHATSAPP_NUMBER = '971544270544';
 
 export default function CartDrawer() {
   const { items, open, closeCart, changeQty, clear } = useCart();

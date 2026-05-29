@@ -32,7 +32,7 @@ export default async function ContactPage() {
             <div className="contact__info" data-reveal>
               <div className="ci">
                 <b>Order &amp; Enquiries</b>
-                <a href="https://wa.me/97100000000" target="_blank" rel="noopener noreferrer">WhatsApp · +971 50 000 0000</a>
+                <a href="https://wa.me/971544270544" target="_blank" rel="noopener noreferrer">WhatsApp · +971 54 427 0544</a>
                 <a href="mailto:hello@frybird.ae">hello@frybird.ae</a>
               </div>
               <div className="ci">

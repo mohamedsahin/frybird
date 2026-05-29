@@ -28,12 +28,14 @@
 
 /* ---------- Reset ---------- */
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
 body{
   font-family:var(--sans);
   background:var(--ink);
   color:var(--cream-soft);
   overflow-x:hidden;
+  /* belt-and-braces: never let a child force the page wider than the viewport */
+  max-width:100%;
   line-height:1.5;
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
