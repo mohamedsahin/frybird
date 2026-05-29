@@ -9,14 +9,14 @@ export const DEFAULT_PRODUCTS: Product[] = [
   /* ---------- CHICKEN ---------- */
   {
     slug: 'nashville-tenders', cat: 'chicken', name: 'Nashville Tenders', tag: 'Signature · 2 pc',
-    price: 16, heat: 5, img: '/img/nashville.png',
+    price: 16, heat: 5, img: 'https://4j995en9ra.ufs.sh/f/xtcJqAlsLd7ECAhMAok9VmRI85QhoXnlwaEcKxWv6bkBs17q',
     blurb: 'Cayenne-lacquered, fiery red, sweat-on-your-brow good.',
     desc: 'Two hand-breaded tenders brined for 12 hours, fried to a shatter, then dredged through our house Nashville oil. Comes with pickles and a slice of milk bread to cool the burn.',
     facts: ['12-hour buttermilk brine', 'House Nashville oil', 'Served with pickles + milk bread']
   },
   {
     slug: 'classic-tenders', cat: 'chicken', name: 'Classic Tenders', tag: '2 pc',
-    price: 14, heat: 1, img: '/img/fried-chicken.png',
+    price: 14, heat: 1, img: 'https://4j995en9ra.ufs.sh/f/xtcJqAlsLd7EueD55mKArJjUHxcdRWF9Yqe1VSt6syNT72i5',
     blurb: 'No heat, all crunch. The honest original.',
     desc: 'The OG. Buttermilk-brined, hand-breaded and fried in small batches until golden. Crunchy on the outside, ridiculously juicy on the inside.',
     facts: ['12-hour buttermilk brine', 'Small-batch fried', 'Choice of dip']
@@ -39,28 +39,28 @@ export const DEFAULT_PRODUCTS: Product[] = [
   /* ---------- BURGERS ---------- */
   {
     slug: 'nash-sando', cat: 'burgers', name: 'The Nash Sando', tag: 'Fan Favourite',
-    price: 15, heat: 3, img: '/img/chicken-sando.png',
+    price: 15, heat: 3, img: 'https://4j995en9ra.ufs.sh/f/xtcJqAlsLd7EZ62KfUugDxIvRsqWJEoHVawhSAX0d4mk15QB',
     blurb: 'The one everyone comes back for.',
     desc: 'A whole Nashville-spiced chicken thigh, melted cheese, pickles and slaw on a butter-toasted brioche bun. The sandwich that built FRYBIRD.',
     facts: ['Whole thigh fillet', 'Butter-toasted brioche', 'House slaw + pickles']
   },
   {
     slug: 'classic-burger', cat: 'burgers', name: 'Classic Chicken Burger', tag: 'The Original',
-    price: 10, heat: 1, img: '/img/burger-classic.png',
+    price: 10, heat: 1, img: 'https://4j995en9ra.ufs.sh/f/xtcJqAlsLd7EkMKCJUSncKq37ZOXWB1thYEf9mRPdoUGJpM2',
     blurb: 'Where it all started — AED 10, every day.',
     desc: 'Crispy chicken fillet, American cheese, lettuce and our signature sauce on a soft toasted bun. Simple, perfect, unbeatable value.',
     facts: ['Crispy fillet', 'Signature sauce', 'Everyday AED 10']
   },
   {
     slug: 'double-smash', cat: 'burgers', name: 'Double Smash', tag: 'Stack It Up',
-    price: 22, heat: 2, img: '/img/stack-burger.png',
+    price: 22, heat: 2, img: 'https://4j995en9ra.ufs.sh/f/xtcJqAlsLd7EDMNy9Jsvu4NX9h0bAKYtTpzakE6ZlPxjMQLB',
     blurb: 'Two smashed patties. Cheese in every layer.',
     desc: 'Two thin beef patties smashed crispy on the flat-top, double American cheese, pickles, onions and burger sauce. A proper tower.',
     facts: ['Double smashed patties', 'Double cheese', 'Add bacon for AED 4']
   },
   {
     slug: 'og-beef', cat: 'burgers', name: 'The OG Beef', tag: 'Single & Mighty',
-    price: 18, heat: 1, img: '/img/original-burger.png',
+    price: 18, heat: 1, img: 'https://4j995en9ra.ufs.sh/f/xtcJqAlsLd7EP3GitXesBcFVutJ5OzQyG7lmjv2aAd4fxUWe',
     blurb: 'A single smash done right.',
     desc: 'One generous smashed patty, melted cheese, crisp lettuce and pickles, all hugged by a toasted brioche bun. The everyday hero.',
     facts: ['Single smash patty', 'Brioche bun', 'Make it a meal for AED 9']
@@ -69,14 +69,14 @@ export const DEFAULT_PRODUCTS: Product[] = [
   /* ---------- SIDES ---------- */
   {
     slug: 'loaded-fries', cat: 'sides', name: 'Loaded Fries', tag: "Share (Or Don't)",
-    price: 18, heat: 2, img: '/img/tenders-tray.png',
+    price: 18, heat: 2, img: 'https://4j995en9ra.ufs.sh/f/xtcJqAlsLd7EuX95tPKArJjUHxcdRWF9Yqe1VSt6syNT72i5',
     blurb: 'Crinkle fries buried in cheese & chicken.',
     desc: 'A mountain of crinkle-cut fries loaded with melted cheese, crispy chicken bits and a drizzle of our spicy sauce. Fork strongly recommended.',
     facts: ['Crinkle-cut', 'Cheese + chicken bits', 'Spicy sauce drizzle']
   },
   {
     slug: 'the-big-tray', cat: 'sides', name: 'The Big Tray', tag: 'Combo',
-    price: 29, heat: 3, img: '/img/burger-fries.png',
+    price: 29, heat: 3, img: 'https://4j995en9ra.ufs.sh/f/xtcJqAlsLd7EYpgCD9SiCahQpoXIBrH9tS4Ny2JzO5GjTk0x',
     blurb: 'Sando, fries and a dip. The full set.',
     desc: 'Our diner-style combo: a Nash Sando, a heap of crinkle fries and a dipping sauce, all served on the checkerboard tray. The full FRYBIRD experience.',
     facts: ['Sando + fries + dip', 'Served on the tray', 'The full experience']

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { CATEGORIES } from '@/data/menu';
 import { UploadButton } from '@/lib/uploadthing';
+import { isUploadThingUrl } from '@/lib/media';
 import type { Product } from '@/types';
 
 const CATS = CATEGORIES.filter((c) => c.id !== 'all');
@@ -37,6 +38,12 @@ export default function ProductForm({ initial }: { initial?: Product }) {
     e.preventDefault();
     setError('');
     if (!f.name.trim() || !f.slug.trim()) { setError('Name and slug are required.'); return; }
+
+    const img = (f.img || '').trim();
+    if (img && !isUploadThingUrl(img)) {
+      setError('Product images must come from UploadThing. Use the Upload button, or paste a URL copied from the Media library.');
+      return;
+    }
 
     const factsValue = (f as { facts: unknown }).facts;
 
@@ -121,7 +128,7 @@ export default function ProductForm({ initial }: { initial?: Product }) {
       </div>
 
       <div className="adm-form__field">
-        <label>Image <span className="adm__muted">(upload, or paste a URL / /public path — leave blank for placeholder)</span></label>
+        <label>Image <span className="adm__muted">(upload to UploadThing, or paste a Media-library URL — leave blank for placeholder)</span></label>
         <div className="adm-form__image">
           <div className="adm-form__imgthumb">
             {f.img ? (
@@ -132,7 +139,7 @@ export default function ProductForm({ initial }: { initial?: Product }) {
             )}
           </div>
           <div className="adm-form__imgcontrols">
-            <input value={f.img || ''} onChange={(e) => set('img', e.target.value)} placeholder="/img/nashville.png or https://…" />
+            <input value={f.img || ''} onChange={(e) => set('img', e.target.value)} placeholder="https://….ufs.sh/f/…" />
             <div className="adm-form__imgrow">
               <UploadButton
                 endpoint="productImage"

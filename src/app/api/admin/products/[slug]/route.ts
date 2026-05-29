@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getProductBySlug, upsertProduct, deleteProduct, normalizeProduct } from '@/lib/store';
+import { isUploadThingUrl } from '@/lib/media';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +28,12 @@ export async function PUT(req, { params }) {
   }
 
   const product = normalizeProduct({ ...body, slug: newSlug });
+  if (product.img && !isUploadThingUrl(product.img)) {
+    return NextResponse.json(
+      { error: 'Product images must be uploaded to UploadThing.' },
+      { status: 422 }
+    );
+  }
   await upsertProduct(product, originalSlug);
   return NextResponse.json({ ok: true, product });
 }
