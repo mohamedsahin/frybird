@@ -19,7 +19,7 @@ export default function LocationForm({ initial }: { initial?: Location }) {
     initial || {
       slug: '', name: '', nameAr: '', descriptor: '', statusLabel: 'Open Now',
       accent: false, isPlaceholder: false, address: '', hours: '', phone: '',
-      mapUrl: '', img: null, mapX: 50, mapY: 50, sortOrder: 0,
+      mapUrl: '', img: null, lat: null, lng: null, sortOrder: 0,
     }
   );
   const [autoSlug, setAutoSlug] = useState(!editing);
@@ -56,8 +56,8 @@ export default function LocationForm({ initial }: { initial?: Location }) {
       phone: f.phone.trim(),
       mapUrl: f.mapUrl.trim(),
       img: img || null,
-      mapX: Number(f.mapX) || 0,
-      mapY: Number(f.mapY) || 0,
+      lat: f.lat === null || f.lat === ('' as unknown) ? null : Number(f.lat),
+      lng: f.lng === null || f.lng === ('' as unknown) ? null : Number(f.lng),
       sortOrder: Number(f.sortOrder) || 0,
     };
 
@@ -159,16 +159,23 @@ export default function LocationForm({ initial }: { initial?: Location }) {
         </>
       )}
 
-      <div className="adm-form__row">
-        <div className="adm-form__field">
-          <label>Map pin X <span className="adm__muted">(0–100, % from left)</span></label>
-          <input type="number" min="0" max="100" value={f.mapX} onChange={(e) => set('mapX', e.target.value)} />
+      {!f.isPlaceholder && (
+        <div className="adm-form__row">
+          <div className="adm-form__field">
+            <label>Latitude <span className="adm__muted">(map preview centre)</span></label>
+            <input type="number" step="any" value={f.lat ?? ''} onChange={(e) => set('lat', e.target.value)} placeholder="25.1288" />
+          </div>
+          <div className="adm-form__field">
+            <label>Longitude</label>
+            <input type="number" step="any" value={f.lng ?? ''} onChange={(e) => set('lng', e.target.value)} placeholder="56.3265" />
+          </div>
         </div>
-        <div className="adm-form__field">
-          <label>Map pin Y <span className="adm__muted">(0–100, % from top)</span></label>
-          <input type="number" min="0" max="100" value={f.mapY} onChange={(e) => set('mapY', e.target.value)} />
-        </div>
-      </div>
+      )}
+      {!f.isPlaceholder && (
+        <p className="adm__muted" style={{ marginTop: -6 }}>
+          Tip: open the spot in Google Maps, right-click the pin → the first row is “lat, lng”. Paste each number above.
+        </p>
+      )}
 
       <div className="adm-form__field">
         <label>Photo <span className="adm__muted">(upload to UploadThing — used on the Locations page)</span></label>

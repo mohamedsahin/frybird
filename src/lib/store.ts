@@ -306,8 +306,12 @@ export async function deleteSubmission(id: string) {
 
 type LocationInput = Partial<Record<keyof Location, unknown>>;
 
-function clampPercent(value: unknown): number {
-  return Math.max(0, Math.min(100, Math.round(Number(value) || 0)));
+// Accepts a number or numeric string; returns null for blank/invalid so the
+// pin is simply omitted rather than defaulting to the middle of the ocean.
+function parseCoord(value: unknown): number | null {
+  if (value === '' || value === null || value === undefined) return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
 }
 
 // Single source of truth for location shaping — shared with the API routes.
@@ -325,8 +329,8 @@ export function normalizeLocation(input: LocationInput): Location {
     phone: (input.phone || '').toString().trim(),
     mapUrl: (input.mapUrl || '').toString().trim(),
     img: input.img ? input.img.toString().trim() : null,
-    mapX: clampPercent(input.mapX),
-    mapY: clampPercent(input.mapY),
+    lat: parseCoord(input.lat),
+    lng: parseCoord(input.lng),
     sortOrder: Number(input.sortOrder) || 0,
   };
 }
@@ -345,8 +349,8 @@ function locationData(l: Location) {
     phone: l.phone,
     mapUrl: l.mapUrl,
     img: l.img,
-    mapX: l.mapX,
-    mapY: l.mapY,
+    lat: l.lat,
+    lng: l.lng,
     sortOrder: l.sortOrder,
   };
 }
@@ -364,8 +368,8 @@ function rowToLocation(row: {
   phone: string;
   mapUrl: string;
   img: string | null;
-  mapX: number;
-  mapY: number;
+  lat: number | null;
+  lng: number | null;
   sortOrder: number;
 }): Location {
   return {
@@ -381,8 +385,8 @@ function rowToLocation(row: {
     phone: row.phone,
     mapUrl: row.mapUrl,
     img: row.img,
-    mapX: row.mapX,
-    mapY: row.mapY,
+    lat: row.lat,
+    lng: row.lng,
     sortOrder: row.sortOrder,
   };
 }

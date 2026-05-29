@@ -13,7 +13,7 @@ export const DEFAULT_LOCATIONS: Location[] = [
     hours: 'Daily · 11:00am – 2:00am',
     phone: '+971 50 000 0000',
     mapUrl: 'https://maps.app.goo.gl/QDCMjTTMcfCWEsyp6',
-    img: '/img/storefront-night.png', mapX: 72, mapY: 34, sortOrder: 1,
+    img: '/img/storefront-night.png', lat: 25.1288, lng: 56.3265, sortOrder: 1,
   },
   {
     slug: 'ajman', name: 'Ajman', nameAr: 'عجمان', descriptor: 'City centre',
@@ -22,7 +22,7 @@ export const DEFAULT_LOCATIONS: Location[] = [
     hours: 'Daily · 11:00am – 2:00am',
     phone: '+971 55 774 0687',
     mapUrl: 'https://maps.app.goo.gl/9FJvRLjQnoxey63E6',
-    img: '/img/interior-counter.png', mapX: 40, mapY: 24, sortOrder: 2,
+    img: '/img/interior-counter.png', lat: 25.4052, lng: 55.5136, sortOrder: 2,
   },
   {
     slug: 'oman', name: 'Oman', nameAr: 'عُمان', descriptor: 'Now serving',
@@ -31,7 +31,7 @@ export const DEFAULT_LOCATIONS: Location[] = [
     hours: 'Daily · 11:00am – 1:00am',
     phone: '+968 0000 0000',
     mapUrl: 'https://www.google.com/maps/search/FRYBIRD+Oman',
-    img: '/img/queue.png', mapX: 60, mapY: 78, sortOrder: 3,
+    img: '/img/queue.png', lat: 23.5880, lng: 58.3829, sortOrder: 3,
   },
   {
     slug: 'your-city', name: 'Your City?', nameAr: '', descriptor: "We're expanding fast",
@@ -40,6 +40,6 @@ export const DEFAULT_LOCATIONS: Location[] = [
     hours: '',
     phone: '',
     mapUrl: '',
-    img: null, mapX: 50, mapY: 50, sortOrder: 4,
+    img: null, lat: null, lng: null, sortOrder: 4,
   },
 ];

@@ -19,7 +19,7 @@ export default async function AdminLocations() {
         <table className="adm__table">
           <thead>
             <tr>
-              <th>Branch</th><th>Status</th><th>Map pin</th><th>Order</th><th></th>
+              <th>Branch</th><th>Status</th><th>Coordinates</th><th>Order</th><th></th>
             </tr>
           </thead>
           <tbody>
@@ -42,7 +42,7 @@ export default async function AdminLocations() {
                   </div>
                 </td>
                 <td>{l.isPlaceholder ? <span className="adm__muted">Teaser · </span> : null}{l.statusLabel}</td>
-                <td className="adm__muted">{l.mapX}%, {l.mapY}%</td>
+                <td className="adm__muted">{l.lat != null && l.lng != null ? `${l.lat}, ${l.lng}` : '—'}</td>
                 <td>{l.sortOrder}</td>
                 <td className="adm__rowactions">
                   <Link href={`/admin/locations/${l.slug}`} className="adm__link">Edit</Link>

@@ -50,9 +50,9 @@ export interface Location {
   mapUrl: string;
   /** Photo URL (UploadThing) or null for a placeholder tile */
   img: string | null;
-  /** Pin position on the stylised map, 0–100 (% of width / height) */
-  mapX: number;
-  mapY: number;
+  /** Real geo coordinates — drive the live map preview. null = no pin yet. */
+  lat: number | null;
+  lng: number | null;
   sortOrder: number;
 }
 
