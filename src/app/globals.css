@@ -750,6 +750,33 @@ html.js [data-reveal-stagger].in > *{opacity:1;transform:none}
 .adm-form input[type=range]{padding:0;accent-color:var(--red)}
 .adm-form__actions{display:flex;gap:12px;margin-top:8px}
 
+/* Product form — image upload + preview */
+.adm-form__image{display:flex;gap:16px;align-items:flex-start}
+.adm-form__imgthumb{width:96px;height:96px;flex:0 0 auto;border-radius:12px;overflow:hidden;background:var(--ink-3);
+  border:2px solid rgba(244,231,196,.14);display:grid;place-items:center}
+.adm-form__imgthumb img{width:100%;height:100%;object-fit:cover}
+.adm-form__imgcontrols{flex:1;display:flex;flex-direction:column;gap:10px;min-width:0}
+.adm-form__imgrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+
+/* Media library */
+.adm-media__upload{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  background:var(--ink-2);border:1px solid rgba(244,231,196,.1);border-radius:14px;padding:18px 20px}
+.adm-media__grid{margin-top:24px;display:grid;gap:18px;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+.adm-media__card{margin:0;background:var(--ink-2);border:1px solid rgba(244,231,196,.1);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column}
+.adm-media__thumb{aspect-ratio:1;background:var(--ink-3);display:grid;place-items:center}
+.adm-media__thumb img{width:100%;height:100%;object-fit:cover}
+.adm-media__meta{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px 4px}
+.adm-media__name{font-size:13px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-media__actions{display:flex;justify-content:space-between;gap:8px;padding:6px 12px 12px}
+.adm-media__del{color:var(--red-bright)}
+
+/* UploadThing button — match the brand red */
+.adm__main [data-ut-element=button]{background:var(--red);font-family:var(--sans);font-weight:800;font-size:14px}
+.adm__main [data-ut-element=button]:hover{background:var(--red-bright)}
+.adm__main [data-ut-element=allowed-content]{color:rgba(244,231,196,.45)}
+
 .adm-login{min-height:100vh;display:grid;place-items:center;padding:24px;
   background:radial-gradient(circle at 50% 30%,rgba(228,24,31,.18),transparent 60%),var(--ink)}
 .adm-login__card{width:100%;max-width:380px;background:var(--ink-2);border:1px solid rgba(244,231,196,.1);

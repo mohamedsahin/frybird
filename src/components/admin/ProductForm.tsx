@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { CATEGORIES } from '@/data/menu';
+import { UploadButton } from '@/lib/uploadthing';
 import type { Product } from '@/types';
 
 const CATS = CATEGORIES.filter((c) => c.id !== 'all');
@@ -120,8 +121,36 @@ export default function ProductForm({ initial }: { initial?: Product }) {
       </div>
 
       <div className="adm-form__field">
-        <label>Image path <span className="adm__muted">(in /public, e.g. /img/nashville.png — leave blank for placeholder)</span></label>
-        <input value={f.img || ''} onChange={(e) => set('img', e.target.value)} placeholder="/img/nashville.png" />
+        <label>Image <span className="adm__muted">(upload, or paste a URL / /public path — leave blank for placeholder)</span></label>
+        <div className="adm-form__image">
+          <div className="adm-form__imgthumb">
+            {f.img ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={f.img} alt="" />
+            ) : (
+              <span className="adm__thumbph">—</span>
+            )}
+          </div>
+          <div className="adm-form__imgcontrols">
+            <input value={f.img || ''} onChange={(e) => set('img', e.target.value)} placeholder="/img/nashville.png or https://…" />
+            <div className="adm-form__imgrow">
+              <UploadButton
+                endpoint="productImage"
+                onClientUploadComplete={(res) => {
+                  const uploaded = res?.[0];
+                  const url = uploaded?.serverData?.url || uploaded?.ufsUrl;
+                  if (url) set('img', url);
+                }}
+                onUploadError={(e) => setError(e.message || 'Upload failed')}
+              />
+              {f.img && (
+                <button type="button" className="adm__link" onClick={() => set('img', '')}>
+                  Remove image
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="adm-form__field">

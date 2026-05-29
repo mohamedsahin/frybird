@@ -1,4 +1,8 @@
 import './globals.css';
+import '@uploadthing/react/styles.css';
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
+import { extractRouterConfig } from 'uploadthing/server';
+import { ourFileRouter } from '@/app/api/uploadthing/core';
 
 export const metadata = {
   title: 'FRYBIRD — Fried Chicken • Burgers | UAE',
@@ -19,6 +23,7 @@ export default function RootLayout({ children }) {
         <script
           dangerouslySetInnerHTML={{ __html: "document.documentElement.className+=' js'" }}
         />
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         {children}
       </body>
     </html>
